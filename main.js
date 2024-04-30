@@ -6,6 +6,8 @@ window.addEventListener("load", function () {
   const ctx = canvas.getContext("2d");
   canvas.width = 500;
   canvas.height = 500;
+  canvas.imageSmoothingEnabled = false;
+
 
   class Game {
     constructor(width, height) {
@@ -13,13 +15,9 @@ window.addEventListener("load", function () {
       this.height = height;
       this.player = new Player(this);
       this.input = new InputHandler();
-      // this.states = {
-      //     STANDING: 0,
-      //     RUNNING: 1,
-      //     JUMPING: 2,
     }
-    update() {
-      this.player.update();
+    update( deltaTime ) {
+      this.player.update(this.input.keys, deltaTime );
     }
     draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
@@ -30,12 +28,16 @@ window.addEventListener("load", function () {
 
   const game = new Game(canvas.width, canvas.height);
   console.log(game);
+  let lastTime = 0;
 
-  function animate( ){
-    game.update();
+  function animate( timeStamp ){
+    const deltaTime = timeStamp - lastTime;
+    //console.log(deltaTime);
+    lastTime = timeStamp;
+    game.update( deltaTime );
     game.draw();
     requestAnimationFrame(animate);
   }
 
-  animate();
+  animate(0);
 });
