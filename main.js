@@ -8,19 +8,20 @@ window.addEventListener("load", function () {
   canvas.height = 500;
   canvas.imageSmoothingEnabled = false;
 
-
   class Game {
     constructor(width, height) {
       this.width = width;
       this.height = height;
+      //   this.groundMargin = 50;
+      this.speed = 3;
       this.player = new Player(this);
       this.input = new InputHandler();
     }
-    update( deltaTime ) {
-      this.player.update(this.input.keys, deltaTime );
+    update(deltaTime) {
+      this.player.update(this.input.keys, deltaTime);
     }
     draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
 
       this.player.draw(ctx);
     }
@@ -30,11 +31,11 @@ window.addEventListener("load", function () {
   console.log(game);
   let lastTime = 0;
 
-  function animate( timeStamp ){
+  function animate(timeStamp) {
     const deltaTime = timeStamp - lastTime;
     //console.log(deltaTime);
     lastTime = timeStamp;
-    game.update( deltaTime );
+    game.update(deltaTime);
     game.draw();
     requestAnimationFrame(animate);
   }
