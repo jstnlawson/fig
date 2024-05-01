@@ -19,6 +19,6 @@ body {
     background: linear-gradient(to bottom, #b9007b, #008cff, #fff);
 }
 
-#player, #layer-1, #layer-2, #layer-3, #layer-4, #layer-5 {
+#player, #layer1, #layer2, #layer3, #layer4, #layer5 {
     display: none;
 }

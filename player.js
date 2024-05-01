@@ -44,14 +44,26 @@ export class Player {
       this.speed = -this.maxSpeed;
       this.frameY = 1;
     } else {
-        this.speed = 0;
-        this.maxFrame = 0;
+      this.speed = 0;
+      this.maxFrame = 0;
     }
 
+    // Limit x coordinate to stay within a specific range
+    const minX = 10; // Adjust this value as needed
+    const maxX = this.game.width - this.width - 200;
+
     this.x += this.speed;
-    if (this.x < 0) this.x = 0;
-    if (this.x > this.game.width - this.width)
-      this.x = this.game.width - this.width;
+
+    // Limit x coordinate to stay within the specified range
+    if (this.x < minX) {
+      this.x = minX;
+    } else if (this.x > maxX) {
+      this.x = maxX;
+    }
+
+    // if (this.x < 0) this.x = 0;
+    // if (this.x > this.game.width - this.width)
+    //   this.x = this.game.width - this.width;
 
     //vertical movement
     this.y += this.vy;
@@ -61,22 +73,21 @@ export class Player {
       this.vy = 0;
     }
     //sprite animation
-    
-    if (this.frameTimer > this.frameInterval){
-        this.frameTimer = 0;
-        if (this.frameX < this.maxFrame){
-            this.frameX++;
-        } else {
-            this.frameX = 0;
-        }
+
+    if (this.frameTimer > this.frameInterval) {
+      this.frameTimer = 0;
+      if (this.frameX < this.maxFrame) {
+        this.frameX++;
+      } else {
+        this.frameX = 0;
+      }
     } else {
-        this.frameTimer += deltaTime;
+      this.frameTimer += deltaTime;
     }
   }
 
   draw(context) {
     // context.imageSmoothingEnabled = false;
-    
 
     context.drawImage(
       this.image,
@@ -85,7 +96,7 @@ export class Player {
       this.width,
       this.height,
       this.x,
-      this.y - 50,//this is the padding
+      this.y - 80, //this is the padding
       this.width,
       this.height
     );
@@ -94,8 +105,9 @@ export class Player {
     return this.y === this.game.height - this.height;
   }
 
-  setState(state) {
+  setState(state, speed) {
     this.currentState = this.states[state];
+    this.game.speed = speed;
     this.currentState.enter();
   }
 }
