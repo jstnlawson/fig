@@ -50,7 +50,7 @@ export class Player {
 
     // Limit x coordinate to stay within a specific range
     const minX = 10; // Adjust this value as needed
-    const maxX = this.game.width - this.width - 200;
+    const maxX = this.game.width - this.width - 300;
 
     this.x += this.speed;
 
