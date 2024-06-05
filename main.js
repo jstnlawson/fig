@@ -28,7 +28,7 @@ window.addEventListener("load", function () {
       this.player.update(this.input.keys, deltaTime);
       //add enemies
       if (this.enemyTimer > this.enemyInterval) {
-        this.addEnemy();
+        //this.addEnemy();
         this.enemyTimer = 0;
       } else {
         this.enemyTimer += deltaTime;
@@ -58,14 +58,10 @@ window.addEventListener("load", function () {
 
   // Draw the updated player sprite
   this.player.draw(ctx);
-    //   this.background.draw(ctx);
-    //   //ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas before drawing
-    //   this.player.draw(ctx);
 
-    // Draw enemies
-    this.enemies.forEach(enemy => {
-      enemy.draw(ctx);
-    });
+    // this.enemies.forEach(enemy => {
+    //   enemy.draw(ctx);
+    // });
     }
     addEnemy() {
         if (this.speed > 0 && Math.random() < 0.5) {

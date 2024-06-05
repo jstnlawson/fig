@@ -3,7 +3,8 @@ const states = {
     FORWARD: 1,
     BACKWARD: 2,
     JUMPING: 3, 
-    FALLING: 4,  
+    FALLING: 4,
+    DUCKING: 5,  
 }
 
 class State {
@@ -26,25 +27,19 @@ export class Standing extends State {
         this.player.maxFrame = 0;
     }
     handleInput(input) {
-        if (input.includes("ArrowRight")) {
-            console.log("forward");
-            this.player.setState( states.FORWARD, 2 );
+        if (this.player.onGround() && input.includes("ArrowUp")) {
+            this.player.setState(states.JUMPING, 0);
+            console.log("jumping from standing state:", this.player.currentState);
+            
+        } else if (input.includes("ArrowLeft")) {
+          this.player.setState(states.BACKWARD, -2);
+        } else if (input.includes("ArrowRight")) {
+            this.player.setState(states.FORWARD, 2);
+        } else if (input.includes("ArrowDown")) {
+            this.player.setState(states.DUCKING, 0);
         }
-        if (input.includes("ArrowLeft")) {
-            console.log("backward");
-            this.player.setState( states.BACKWARD, -2 );
-        } 
-        if (input.includes("ArrowUp")) {
-            this.player.setState( states.JUMPING, 0);
-        }
-        if (input.includes("ArrowUp") && input.includes("ArrowRight")) {
-            this.player.setState( states.JUMPING , 2);
-        } 
-        if (input.includes("ArrowLeft") && input.includes("ArrowUp")) {
-            this.player.setState(states.JUMPING, -2);
-        }
-      
-    }
+      }
+
 }
 
 export class Forward extends State {
@@ -58,22 +53,18 @@ export class Forward extends State {
         this.player.maxFrame = 5;
     }
     handleInput(input) {
-       
-        if (input.includes("ArrowLeft")) {
+
+        if (this.player.onGround() && input.includes("ArrowUp")) {
+            this.player.setState(states.JUMPING, 2);
+          } 
+          else if (this.player.onGround() && input.includes("ArrowDown")) {
+            this.player.setState(states.DUCKING, 2);
+            } else if (input.includes("ArrowLeft")) {
             this.player.setState(states.BACKWARD, 2);
-        }
-        if (input.includes("ArrowUp")) {
-            this.player.setState(states.JUMPING, 0);
-        } 
-        if (input.includes("ArrowUp") && input.includes("ArrowRight")) {
-            this.player.setState( states.JUMPING , 2);
-        } 
-        if (input.includes("ArrowLeft") && input.includes("ArrowUp")) {
-            this.player.setState(states.JUMPING, -2);
-        }
-        else if (!input.includes("ArrowRight")) {
+          } else if (!input.includes("ArrowRight")) {
             this.player.setState(states.STANDING, 0);
-        }
+          } 
+       
       }  
 }
 
@@ -88,22 +79,15 @@ export class Backward extends State {
         this.player.maxFrame = 5;
     }
     handleInput(input) {
-        if (input.includes("ArrowRight")) {
-            this.player.setState(states.FORWARD, 2);
-        }
-        if (input.includes("ArrowUp")) {
-            this.player.setState(states.JUMPING, 0);
-        } 
-        if (input.includes("ArrowUp") && input.includes("ArrowRight")) {
-            this.player.setState( states.JUMPING , 2);
-        } 
-        if (input.includes("ArrowLeft") && input.includes("ArrowUp")) {
+
+        if (this.player.onGround() && input.includes("ArrowUp")) {
             this.player.setState(states.JUMPING, -2);
-        }
-        
-        else if (!input.includes("ArrowLeft")) {
+          } else if (input.includes("ArrowRight")) {
+            this.player.setState(states.FORWARD, 2);
+          } else if (!input.includes("ArrowLeft")) {
             this.player.setState(states.STANDING, 0);
-        }
+          }
+
     }
 }
 
@@ -113,15 +97,16 @@ export class Jumping extends State {
         this.player = player;
     }
     enter() {
-        // this.player.frameX = 1; 
-        // this.player.frameY = 0;
-        // this.player.maxFrame = 1;
-      if ( this.player.onGround()) this.player.vy = -20;
+        this.player.frameX = 0; 
+        this.player.frameY = 4;
+        this.player.maxFrame = 5;
+      if ( this.player.onGround()) { this.player.vy = -22;}
             
     }
     handleInput(input) {
+        //these keep the momentum of the player when falling
         if (this.player.vy > this.player.gravity) {
-            this.player.setState(states.FALLING, 0);
+            this.player.setState(states.FALLING, this.player.speed);
         }
         if (input.includes("ArrowRight") && this.player.vy > this.player.gravity) {
             this.player.setState(states.FALLING, 2);
@@ -139,12 +124,30 @@ export class Falling extends State {
     }
     enter() {
 
-        // this.player.frameX = 2;
-        this.player.maxFrame = 0;
+        this.player.frameX = 0;
+        this.player.frameY = 5;
+        this.player.maxFrame = 5;
     }
     handleInput(input) {
         if (this.player.onGround()) {
             this.player.setState(states.STANDING, 0);
         }
+    }
+}
+
+export class Ducking extends State {
+    constructor(player) {
+        super('DUCKING');
+        this.player = player;
+    }
+    enter() {
+        this.player.frameX = 0;
+        this.player.frameY = 2;
+        this.player.maxFrame = 5;
+    }
+    handleInput(input) {
+      if (!input.includes("ArrowDown")) {
+        this.player.setState(states.STANDING, 0);
+      }
     }
 }

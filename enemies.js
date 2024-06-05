@@ -54,7 +54,7 @@ export class FlyingEnemy extends Enemy {
         this.width = 100;
         this.height = 100;
         this.x = this.game.width + Math.random() * this.game.width * 0.5;
-        this.y = Math.random() * this.game.height * 0.5 - this.ground;
+        this.y = Math.random() * this.game.height * 0.5 - this.ground;//add this.ground to the y position to make the enemy fly above the ground(kind of works)
         this.speedX = Math.random() * 2 + 2;
         this.speedY = 0;
         this.maxFrame = 0;

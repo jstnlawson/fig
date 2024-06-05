@@ -19,6 +19,8 @@ body {
     max-width: 100%;
     max-height: 100%;
     background: linear-gradient(to bottom, black,  #b9007b, #008cff, #fff 415px, green 416px, black);
+    background: linear-gradient(to bottom, black,  #777, #c4c4c4, #fff 415px, #666 416px, black);
+
 }
 
 
